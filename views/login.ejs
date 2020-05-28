@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登录</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/form-elements.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Favicon and touch icons -->
+
+
+  </head>
+
+  <body>
+        <div class="top-content">
+          
+            <div class="inner-bg">
+                <div class="container">
+                    
+
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                          <div class="form-top">
+                            <div class="form-top-left">
+                              <h3>登录</h3>
+
+                            </div>
+                            <div class="form-top-right">
+                              <i class="fa fa-key"></i>
+                            </div>
+                            </div>
+                            <div class="form-bottom">
+                          <form role="form" action="" method="post" class="login-form">
+                            <div class="form-group">
+                              <label class="sr-only" for="form-username">Username</label>
+                                <input type="text" name="form-username" placeholder="用户名" class="form-username form-control" id="username" >
+                              </div>
+                              <div class="form-group">
+                                <label class="sr-only" for="form-password">Password</label>
+                                <input type="password" name="form-password" placeholder="密码" class="form-password form-control" id="password" >
+                              </div>
+                              <a class="btn btn-link-1 launch-modal" id="login" style="width: 200px">登录</a>
+                              <a class="btn btn-link-1 launch-modal" data-modal-id="modal-register" style="width: 200px">注册</a>
+                          </form>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+
+
+
+    </div>
+    <!-- MODAL -->
+    <div class="modal fade" id="modal-register" tabindex="-1" role="dialog" aria-labelledby="modal-register-label" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+            </button>
+            <h3 class="modal-title" id="modal-register-label">注册</h3>
+
+          </div>
+
+          <div class="modal-body">
+
+            <form role="form" class="registration-form">
+              <div class="form-group">
+                <label class="sr-only" for="form-first-name">用户名</label>
+                <input type="text" name="form-first-name" placeholder="用户名" class="form-first-name form-control" id="form-username">
+              </div>
+              <div class="form-group">
+                <label class="sr-only" for="form-email">Email</label>
+                <input type="text" name="form-email" placeholder="Email" class="form-email form-control" id="form-email">
+              </div>
+              <div class="form-group">
+                <label class="sr-only" for="form-password">密码</label>
+                <input type="password" name="form-password" placeholder="密码" class="form-email form-control" id="form-password">
+              </div>
+              <div class="form-group">
+                <label class="sr-only" for="form-password2">再次输入密码</label>
+                <input type="password" name="form-password2" placeholder="再次输入密码" class="form-email form-control" id="form-password2">
+              </div>
+
+              <button type="button" id="register" class="btn" data-dismiss="modal">完成</button>
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Javascript -->
+    <script src="assets/js/jquery-1.11.1.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery.backstretch.min.js"></script>
+    <script src="assets/js/scripts.js"></script>
+    <script type="text/javascript">
+      $('#login').on('click', function() {
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var obj = {
+          username: username,
+          password: password
+        };
+        $.ajax({
+          type: 'POST',
+          url: '/data/login',
+          data: obj,
+          success: function(data) {
+            if(data.status) {
+              window.location.href = '/';
+            } else {
+              alert('登录失败');
+            }
+          },
+          error: function() {
+            alert('登录失败');
+          },
+          dataType: 'json'
+        });
+      });
+
+      $('#register').on('click', function() {
+        var username = $('#form-username').val();
+        var email = $('#form-email').val();
+        var password = $('#form-password').val();
+        var password2 = $('#form-password2').val();
+        if(password !== password2) {
+          alert("两次密码不一致");
+        } 
+          else if(!(/\w{1,20}/).test(username))
+            alert("用户名不符合格式(1~20个字母与数字组合)");
+          else if(!(/^[a-zA-Z0-9]{1,}@(([a-zA-z0-9]-*){1,}\.){1,3}[a-zA-z\-]{1,}$/).test(email))
+            alert("邮箱不符合格式");
+          else {
+          var obj = {
+            username: username,
+            email: email,
+            password: password
+          };
+          $.ajax({
+            type: 'POST',
+            url: '/data/register',
+            data: obj,
+            success: function(data) {
+              if(data.status) {
+                alert("注册成功");
+              } else {
+                alert(data.info);
+              }
+            },
+            error: function() {
+              alert('注册失败');
+            },
+            dataType: 'json'
+          });
+        }
+      });
+    </script>
+    <!--[if lt IE 10]>
+              <script src="assets/js/placeholder.js"></script>
+          <![endif]-->
+
+  </body>
+
+</html>

@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="ch">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<title>个人中心</title>
+		<script src="js/jquery-1.11.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+
+		<script>
+			$(function() {
+				$(".meun-item").click(function() {
+					$(".meun-item").removeClass("meun-item-active");
+					$(this).addClass("meun-item-active");
+					var itmeObj = $(".meun-item").find("img");
+					itmeObj.each(function() {
+						var items = $(this).attr("src");
+						items = items.replace("_grey.png", ".png");
+						items = items.replace(".png", "_grey.png")
+						$(this).attr("src", items);
+					});
+					var attrObj = $(this).find("img").attr("src");;
+					attrObj = attrObj.replace("_grey.png", ".png");
+					$(this).find("img").attr("src", attrObj);
+				});
+				$(".toggle-btn").click(function() {
+					$("#leftMeun").toggleClass("show");
+					$("#rightContent").toggleClass("pd0px");
+				})
+
+			})
+		</script>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/slide.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/flat-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/jquery.nouislider.css">
+	</head>
+
+	<body>
+		<div id="wrap">
+			<!-- 左侧菜单栏目块 -->
+			<div class="leftMeun" id="leftMeun">
+				<div id="logoDiv">
+					<p id="logoP"><span>后台管理</span></p>
+				</div>
+
+<div id="personInfor">
+			<p>
+				<img id="tx" class="img-responsive" src="" style="width: 70%">
+				<a id="img " data-toggle="modal" data-target="#myModal">头像设置</a><br>
+				<a id="back">退出登录</a>
+			</p>
+		</div>
+
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							上传头像
+						</h4>
+					</div>
+					<div class="modal-body">
+						<form id="upload" >
+							<input id ='file' accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" type='file' name='file'>
+						</form>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+						</button>
+						<button type="button" id="subimg" class="btn btn-primary">
+							提交更改
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
+		<script>
+
+            $('#subimg').on("click",function  Upload() {
+                var formData = new FormData();
+                var file=$('#file').get(0).files[0];
+                var reader = new FileReader();
+        		reader.readAsDataURL(file);
+        		var result;
+        		reader.onload = function (e) {
+            		result = this.result;
+            		console.log(this.result);
+            		var obj ={
+            			img: this.result
+            		}
+	               $.ajax({
+	                   type: 'POST',
+	                   url: '/data/img',
+	                   data: obj,
+	                   dataType:'json',
+	                   success: function(data) {
+						   if(data.status){
+						   	  $("#tx").attr('src',data.url);
+						   	  // window.location.href='/user'
+						   }
+	                   },
+	                   error: function() {
+	                       alert('上传失败');
+	                   }
+	               });
+            		//显示文件
+            		// result.innerHTML = '<img src="' + this.result + '" alt="" />';
+        		}
+        		console.log(result);
+             //    console.log(file);
+             //    formData.append("pic", file);
+             //    console.log(reader.result);
+            	// console.log(formData);
+            	// console.log(formData.get("pic"));
+            	// // console.log(data)
+
+            });
+		</script>
+				<div class="meun-item meun-item-active" href="#sour" aria-controls="sour" role="tab" data-toggle="tab"><img src="images/icon_source.png">资源管理</div>
+
+				<div class="meun-item" href="#chan" aria-controls="chan" role="tab" data-toggle="tab"><img src="images/icon_change_grey.png">修改密码</div>
+			</div>
+			<!-- 右侧具体内容栏目 -->
+			<div id="rightContent">
+				<a class="toggle-btn" id="nimei">
+					<i class="glyphicon glyphicon-align-justify"></i>
+				</a>
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<!-- 资源管理模块 -->
+					<div role="tabpanel" class="tab-pane active" id="sour">
+						<div class="check-div form-inline">
+						</div>
+						<div class="data-div">
+							<div class="row tableHeader" >
+								<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 ">
+									尊姓大名
+								</div>
+								<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+									心仪门派
+								</div>
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+									飞鸽传书
+								</div>
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+									门派回复
+								</div>
+							</div>
+							<div class="tablebody" id="listhead">
+
+
+							</div>
+
+						</div>
+						<!--页码块-->
+
+						<footer class="footer">
+							<ul class="pagination">
+								<li>
+									<select>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+										<option>6</option>
+										<option>7</option>
+										<option>8</option>
+										<option>9</option>
+										<option>10</option>
+									</select>
+									页
+								</li>
+								<li class="gray">
+									共20页
+								</li>
+								<li>
+									<i class="glyphicon glyphicon-menu-left">
+                                    </i>
+								</li>
+								<li>
+									<i class="glyphicon glyphicon-menu-right">
+                                    </i>
+								</li>
+							</ul>
+						</footer>
+
+
+					</div>
+
+					<!-- 修改密码模块 -->
+					<div role="tabpanel" class="tab-pane" id="chan">
+
+						<div style="padding: 50px 0;margin-top: 50px;background-color: #fff; text-align: right;width: 420px;margin: 50px auto;">
+							<form class="form-horizontal">
+								<div class="form-group">
+									<label for="sKnot" class="col-xs-4 control-label" >原密码：</label>
+									<div class="col-xs-5">
+										<input id = "oldpwd" maxlength="100" type="password" class="form-control input-sm duiqi" id="sKnot" placeholder="" style="margin-top: 7px;">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="sKnot" class="col-xs-4 control-label" >新密码：</label>
+									<div class="col-xs-5">
+										<input id = "newpwd" maxlength="100" type="password" class="form-control input-sm duiqi" id="sKnot" placeholder="" style="margin-top: 7px;">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="sKnot" class="col-xs-4 control-label" >重复密码：</label>
+									<div class="col-xs-5">
+										<input id = "newpwd2" maxlength="100" type="password" class="form-control input-sm duiqi" id="sKnot" placeholder="" style="margin-top: 7px;">
+									</div>
+								</div>
+								<div class="form-group text-right">
+									<div class="col-xs-offset-4 col-xs-5" style="margin-left: 169px;">
+										<button type="button" class="btn btn-xs btn-green" data-toggle='modal' data-target='#warning' id="save">保 存</button>
+									</div>
+								</div>
+							</form>
+							<!--查看警告弹出窗口-->
+							<div class="modal fade" id="warning" role="dialog" aria-labelledby="gridSystemModalLabel">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+											<h4 class="modal-title" id="gridSystemModalLabel">提示</h4>
+										</div>
+										<div class="modal-body">
+											<div class="container-fluid" id="info">
+												<!-- info -->
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-xs btn-green" data-dismiss="modal">确定</button>
+										</div>
+									</div>
+									<!-- /.modal-content -->
+								</div>
+								<!-- /.modal-dialog -->
+							</div>
+							<!-- /.modal -->
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery.nouislider.js"></script>
+			<script type="text/javascript">
+				function ToStr(str) {
+					var res="";
+					for(var i =0;i<str.length;i++){
+						res=res+String.fromCharCode(str[i]);
+					}
+					return res;
+				}
+		</script>
+		<script type="text/javascript">
+
+			$(document).ready(function() {
+				function blobToDataURL(blob, callback) {
+         		var a = new FileReader();
+         		a.onload = function (e) { callback(e.target.result); }
+         			a.readAsDataURL(blob);
+     			}
+
+				$.ajax({
+					type: 'POST',
+					url: '/data/search_img',
+					success: function(data) {
+						if(data.status){
+							// var blob = new Blob(hexCharCodeToStr(data.url),{type:"text/plain"}); 
+							 console.log(data.url);
+							 console.log(ToStr(data.url.data));
+							 // var blob = new Blob(ToStr(data.url.data),{type:"text/plain"}); 
+							 $("#tx").attr('src',ToStr(data.url.data));
+							// hexCharCodeToStr(data.url);
+					      //   blobToDataURL(blob, function (dataurl) {
+        			// 			console.log(dataurl);
+     						// }); 
+						}
+					},
+					error: function() {
+						
+						},
+					dataType: 'json'
+				});
+
+				$("#logoP").on("click",function(){
+					window.location.href="/index";
+				});
+				$("#back").on("click",function(){
+					window.location.href="/login";
+				});
+
+				$("#save").on("click",function() {
+					var oldpwd = $("#oldpwd").val();
+					var newpwd = $("#newpwd").val();
+					var newpwd2 = $("#newpwd2").val();
+					var obj={
+						oldpwd: oldpwd,
+						newpwd: newpwd	
+					}
+					
+					if(newpwd === '')
+						$("#info").html("请输入新密码");
+					else if(newpwd !== newpwd2)
+						$("#info").html("两次密码输入不一致");
+
+					else {
+						$.ajax({
+							type: 'POST',
+							url: '/data/save',
+							data: obj,
+							success: function(data) {
+								$("#info").html(data.info);
+							},
+							error: function() {
+								$("#info").html("修改失败");
+							},
+							dataType: 'json'
+							});
+					}
+				});
+			    $.ajax({
+			        type: 'POST',
+			        url: '/data/query',
+			        // data: obj,
+			        success: function(data) {
+			            if (data.status) {
+			            	var obj = data.info;
+			            	for(var i = 0 ; i < obj.length ; i++){
+			            		switch(obj[i].flag){
+			            			case 0:
+			            				$('#listhead').append("<div class='row'><div class='col-lg-2 col-md-2 col-sm-2 col-xs-2 levl3'>"
+			            				+ obj[i].name +
+			            				"</div><div class='col-lg-2 col-md-2 col-sm-2 col-xs-2 levl3'><span></span><span>"
+			            				+ obj[i].subject+
+			            				"</span></div><div class='col-lg-4 col-md-4 col-sm-4 col-xs-4'>"
+			            				+ obj[i].email+
+									    "</div><div class='col-lg-4 col-md-4 col-sm-4 col-xs-4'><button class='btn btn-warning btn-xs' id ='huifu' ata-toggle='modal' data-target='#changeSource'>审核中</button></div></div>");
+										break;
+									case 1:
+										$('#listhead').append("<div class='row'><div class='col-lg-2 col-md-2 col-sm-2 col-xs-2   levl3'>"
+			            				+ obj[i].name +
+			            				"</div><div class='col-lg-2 col-md-2 col-sm-2 col-xs-2 levl3'><span></span><span>"
+			            				+ obj[i].subject+
+			            				"</span></div><div class='col-lg-4 col-md-4 col-sm-4 col-xs-4'>"
+			            				+ obj[i].email+
+									    "</div><div class='col-lg-4 col-md-4 col-sm-4 col-xs-4'><button class='btn btn-success btn-xs' data-toggle='modal' data-target='#changeSource'>已同意</button></div></div>");
+										break;
+									case 2:
+										$('#listhead').append("<div class='row'><div class='col-lg-2 col-md-2 col-sm-2 col-xs-2 levl3'>"
+			            				+ obj[i].name +
+			            				"</div><div class='col-lg-2 col-md-2 col-sm-2 col-xs-2 levl3'><span></span><span>"
+			            				+ obj[i].subject+
+			            				"</span></div><div class='col-lg-4 col-md-4 col-sm-4 col-xs-4'>"
+			            				+ obj[i].email+
+									    "</div><div class='col-lg-4 col-md-4 col-sm-4 col-xs-4'><button class='btn btn-danger btn-xs' id ='huifu' ata-toggle='modal' data-target='#changeSource'>被拒绝</button></div></div>");
+										break;
+			            		}
+			            	}
+			            } else {
+
+			            }
+			        },
+			        error: function() {
+			            
+			        },
+			        dataType: 'json'
+			    });
+			});
+		</script>
+	</body>
+
+</html>
